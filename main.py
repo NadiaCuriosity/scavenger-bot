@@ -12,16 +12,19 @@ def get_transcript():
         return "Error: No URL provided", 400
 try:
     import urllib.parse
-    video_id = urllib.parse.parse_qs(urllib.parse.urlparse(video_url).query).get("v", [None])[0]
+    video_id = urllib.parse.parse_qs(
+        urllib.parse.urlparse(video_url).query
+    ).get("v", [None])[0]
     if not video_id:
-        video_id = video_url.split("/")[-1]
+        video_id = video_url.split("/")[-1].split("?")[0]
 
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
     cleaned = "\n".join([t['text'] for t in transcript])
-    return cleaned
+        return cleaned
 
-    except Exception as e:
+except Exception as e:
         return f"Error: {e}", 500
+
 import os
 
 if __name__ == '__main__':
